@@ -24,6 +24,7 @@ jobs:
           repository: Betterworks/common-actions
           ref: '0.2.2'
           token: ${{ secrets.REPO_TOKEN }} # stored in GitHub secrets
+          path: .github/actions/common-actions
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
