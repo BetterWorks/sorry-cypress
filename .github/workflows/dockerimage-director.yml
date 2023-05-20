@@ -15,6 +15,10 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
+      - name: Get release tag
+        id: get-tag
+        run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+
       - name: Get Common Action Repo
         uses: actions/checkout@v2
         with:
