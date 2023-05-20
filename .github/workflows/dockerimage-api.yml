@@ -60,5 +60,5 @@ jobs:
         with:
           container-name: "381963057307.dkr.ecr.us-east-1.amazonaws.com/${{env.SERVICE_NAME}}:api-${{ github.sha }}"
           repo-name: ${{env.SERVICE_NAME}}
-          image-tags: ${{ steps.get-tag.outputs.tag }}
+          image-tags: api-${{ steps.get-tag.outputs.tag }}
           ecr-registry: ${{ steps.login-ecr.outputs.registry }}
