@@ -4,25 +4,55 @@ on:
   push:
     branches:
       - master
+      - bw-build
     tags:
       - v*
 
 jobs:
   build:
+    env:
+      SERVICE_NAME: sorry-cypress
     runs-on: ubuntu-latest
     if: "!contains(toJSON(github.event.commits.*.message), '[skip ci]')"
 
     steps:
       - uses: actions/checkout@master
 
-      - name: Docker Login
-        uses: docker/login-action@v1.14.1
+      - name: Get Common Action Repo
+        uses: actions/checkout@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          repository: Betterworks/common-actions
+          ref: '0.2.2'
+          token: ${{ secrets.REPO_TOKEN }} # stored in GitHub secrets
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.ECR_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.ECR_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Dockerhub Release
-        run: ./scripts/release-dockerhub.sh -s api
+      - name: Pull container if exists
+        uses: ./.github/actions/common-actions/pull-container
+        id: container-pull
+        with:
+          container-name: "381963057307.dkr.ecr.us-east-1.amazonaws.com/${{env.SERVICE_NAME}}:api-${{ github.sha }}"
+
+      - name: Build container if it doesn't exists
+        id: build-container
+        uses: ./.github/actions/common-actions/build-container
+        if: steps.container-pull.outputs.successful == 'false'
+        with:
+          docker-file: packages/api/Dockerfile
+          container-name: "381963057307.dkr.ecr.us-east-1.amazonaws.com/${{env.SERVICE_NAME}}:api-${{ github.sha }}"
+      - name: Push container to ecr
+        id: push-container
+        uses: ./.github/actions/common-actions/push-to-ecr
+        with:
+          container-name: "381963057307.dkr.ecr.us-east-1.amazonaws.com/${{env.SERVICE_NAME}}:api-${{ github.sha }}"
+          repo-name: ${{env.SERVICE_NAME}}
+          image-tags: ${{ steps.get-tag.outputs.tag }}
+          ecr-registry: ${{ steps.login-ecr.outputs.registry }}
