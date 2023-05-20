@@ -2,9 +2,6 @@ name: Update Director Dockerhub Image
 
 on:
   push:
-    branches:
-      - master
-      - bw-build
     tags:
       - v*
 

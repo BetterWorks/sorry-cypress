@@ -2,9 +2,6 @@ name: Update Dashboard Dockerhub Images
 
 on:
   push:
-    branches:
-      - master
-      - bw-build
     tags:
       - v*
 
