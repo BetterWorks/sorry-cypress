@@ -28,6 +28,6 @@ export const INACTIVITY_TIMEOUT_SECONDS = Number(
 );
 
 export const REDIS_URI = process.env.REDIS_URI;
-export const DETECT_JOB_RETRIES = process.env.DETECT_JOB_RETRIES || 'false';
+export const DETECT_JOB_RETRIES = process.env.DETECT_JOB_RETRIES || 'true';
 export const PROBE_LOGGER = process.env.PROBE_LOGGER || 'false';
 export const BASE_PATH = process.env.BASE_PATH || '/';
