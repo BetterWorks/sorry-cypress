@@ -24,7 +24,7 @@ services:
       MONGODB_DATABASE: 'sorry-cypress'
 
       SCREENSHOTS_DRIVER: '../screenshots/minio.driver'
-      GITLAB_JOB_RETRIES: 'false'
+      DETECT_JOB_RETRIES: 'false'
       MINIO_ACCESS_KEY: '<minio-user>'
       MINIO_SECRET_KEY: '<minio-pass>'
       MINIO_ENDPOINT: '<minio-ip-address>'

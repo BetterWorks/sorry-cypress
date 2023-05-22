@@ -7,7 +7,7 @@ import {
   Task,
 } from '@sorry-cypress/common';
 import {
-  GITLAB_JOB_RETRIES,
+  DETECT_JOB_RETRIES,
   INACTIVITY_TIMEOUT_SECONDS,
 } from '@sorry-cypress/director/config';
 import { getRunCiBuildId } from '@sorry-cypress/director/lib/ciBuildId';
@@ -104,7 +104,7 @@ export const createRun: ExecutionDriver['createRun'] = async (params) => {
       },
       specs,
     };
-    if (isProviderGitlab && GITLAB_JOB_RETRIES == 'true') {
+    if (DETECT_JOB_RETRIES == 'true') {
       newRun.meta.ci = {
         params: {
           ...params.ci.params,
@@ -134,10 +134,8 @@ export const createRun: ExecutionDriver['createRun'] = async (params) => {
         throw new Error('No run found');
       }
 
-      if (isProviderGitlab && GITLAB_JOB_RETRIES == 'true') {
-        if (
-          !run.meta.ci.params?.ciJobName.includes(params.ci.params?.ciJobName)
-        ) {
+      if (DETECT_JOB_RETRIES == 'true') {
+        if (!run.completion?.completed) {
           // New ci job joining the pool
           addNewJobToRun(run.runId, params.ci.params?.ciJobName);
         } else {
