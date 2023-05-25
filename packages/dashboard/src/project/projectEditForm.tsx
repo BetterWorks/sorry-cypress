@@ -195,8 +195,8 @@ export const ProjectEditForm: ProjectEditFormComponent = function ProjectEditFor
                   message: 'Runs timeout is required',
                 },
                 max: {
-                  value: 720,
-                  message: 'Max value is 720 minutes (12 hours)',
+                  value: 10080,
+                  message: 'Max value is 10080 minutes (1 week)',
                 },
                 min: {
                   value: 1,
