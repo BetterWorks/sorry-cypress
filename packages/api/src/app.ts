@@ -64,6 +64,7 @@ export const start = async function start(
   });
 
   const httpServer = stoppable(http.createServer(app), 10_000) as Server;
+  httpServer.keepAliveTimeout = 400000;
   await new Promise((resolve, reject) => {
     httpServer.once('listening', resolve);
     httpServer.once('error', reject);

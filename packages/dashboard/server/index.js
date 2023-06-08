@@ -5,10 +5,11 @@ const { PORT } = require('./config');
 async function main() {
   app.on('error', (error) => {
     throw error;
-  });
-  app.listen(PORT, () => {
+  });  
+  const server = app.listen(PORT, () => {
     console.log(`Listening on http://localhost:${PORT}...`);
   });
+  server.keepAliveTimeout = 400000;
 }
 
 main().catch((error) => {

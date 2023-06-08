@@ -15,11 +15,12 @@ async function main() {
   app.on('error', (error) => {
     throw error;
   });
-  app.listen(PORT, async () => {
+  const server = app.listen(PORT, async () => {
     getLogger().log(
       `🚀 Director service is ready at http://0.0.0.0:${PORT}/...`
     );
   });
+  server.keepAliveTimeout = 400000;
 }
 
 app.disable('x-powered-by');
